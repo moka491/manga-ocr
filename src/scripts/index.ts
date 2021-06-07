@@ -1,4 +1,4 @@
-import cv from "@techstark/opencv-js";
+import cv, { CCL_DEFAULT } from "@techstark/opencv-js";
 
 let imgElement = document.getElementById("srcImage");
 
@@ -7,42 +7,56 @@ setTimeout(() => {
 
   cv.cvtColor(mat, mat, cv.COLOR_RGBA2GRAY);
 
-  cv.threshold(mat, mat, 0, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU);
+  cv.GaussianBlur(mat, mat, new cv.Size(3, 3), 1);
 
-  let kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(5, 5));
+  cv.threshold(mat, mat, 0, 255, cv.THRESH_BINARY_INV | cv.THRESH_OTSU);
+
+  let kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(8, 8));
   cv.dilate(mat, mat, kernel, new cv.Point(-1, -1), 1);
 
-  let contours = new cv.MatVector();
-  let hierarchy = new cv.Mat();
+  let labels = new cv.Mat();
+  let stats = new cv.Mat();
+  let centroids = new cv.Mat();
 
-  cv.findContours(
+  let numLabels = cv.connectedComponentsWithStats(
     mat,
-    contours,
-    hierarchy,
-    cv.RETR_LIST,
-    cv.CHAIN_APPROX_SIMPLE
+    labels,
+    stats,
+    centroids,
+    8
   );
 
-  cv.cvtColor(mat, mat, cv.COLOR_GRAY2BGR);
+  cv.cvtColor(mat, mat, cv.COLOR_GRAY2RGB);
 
-  for (let i = 0; i < contours.size(); i++) {
-    const rect = cv.boundingRect(contours.get(i));
-    const area = cv.contourArea(contours.get(i));
+  console.log(numLabels);
+  for (let i = 0; i < numLabels; i++) {
+    const p1 = new cv.Point(
+      stats.intPtr(i, cv.CC_STAT_LEFT)[0],
+      stats.intPtr(i, cv.CC_STAT_TOP)[0]
+    );
 
-    if (rect.width < 10 && rect.height < 10) continue;
-    if (rect.width > 50 && rect.height > 50) continue;
+    const p2 = new cv.Point(
+      stats.intPtr(i, cv.CC_STAT_LEFT)[0] +
+        stats.intPtr(i, cv.CC_STAT_WIDTH)[0],
+      stats.intPtr(i, cv.CC_STAT_TOP)[0] + stats.intPtr(i, cv.CC_STAT_HEIGHT)[0]
+    );
 
-    cv.drawContours(
+    const maxWidth = p2.x - p1.x > 150;
+    const maxHeight = p2.y - p1.y > 500;
+
+    if (maxWidth || maxHeight) continue;
+
+    cv.rectangle(
       mat,
-      contours,
-      i,
+      p1,
+      p2,
       new cv.Scalar(
-        Math.random() * 255,
-        Math.random() * 255,
-        Math.random() * 255
+        128 * Math.random() + 70,
+        128 * Math.random() + 70,
+        128 * Math.random() + 70
       ),
-      2,
-      cv.LINE_8
+      5,
+      2
     );
   }
 
