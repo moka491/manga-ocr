@@ -1,3 +1,2 @@
-def hello_world():
-    print("hello")
-    return "bruh"
+def get_name():
+    return "world"

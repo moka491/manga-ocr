@@ -1,23 +1,23 @@
 from cefpython3 import cefpython as cef
-import base64
 import sys
 import tempfile
 
-from src.interface import hello_world
+from src.interface import get_name
 
 
 def main():
-    setup_cef()
+    init_cef()
 
 
-def setup_cef():
+def init_cef():
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
 
     settings = {'cache_path': tempfile.gettempdir()}
     cef.Initialize(settings=settings)
 
-    browser = cef.CreateBrowserSync(url="http://localhost:1234",
-                                    window_title="Manga OCR")
+    url = "http://localhost:1234" if "--dev" in sys.argv else "file:///web/dist/index.html"
+
+    browser = cef.CreateBrowserSync(url=url, window_title="Manga OCR bruh")
 
     setup_bindings(browser)
 
@@ -29,7 +29,7 @@ def setup_bindings(browser):
     bindings = cef.JavascriptBindings(
         bindToFrames=False, bindToPopups=False)
 
-    bindings.SetFunction("hello_world", binding_wrapper(hello_world))
+    bindings.SetFunction("get_name", binding_wrapper(get_name))
     browser.SetJavascriptBindings(bindings)
 
 
