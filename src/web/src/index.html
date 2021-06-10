@@ -1,7 +1,17 @@
-<html>
-<body>
-hello <span id="name"></span>!
-<script src="scripts/index.ts"></script>
-</body>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="styles/index.scss"/>
+    </head>
+    <body>
+        <div id="content-wrapper">
+            <div id="toolbar"><input id="file-input" type="file" class="primary" /></div>
+            <div id="canvas-wrapper">
+                <canvas id="canvas"></canvas>
+            </div>
+            <div id="pages-area"></div>
+         </div>
+
+        <script src="scripts/canvas.ts"></script>
+    </body>
 </html>
 
