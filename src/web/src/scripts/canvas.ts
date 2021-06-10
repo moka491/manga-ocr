@@ -1,5 +1,4 @@
-import {getBase64Strings} from "exif-rotate-js";
-import {fixOrientation} from "./fixImageOrientation";
+import * as blueimp from "blueimp-load-image"
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
@@ -56,8 +55,8 @@ function recalculateFollowMousePanDistance(newScale) {
     // solved for the new rel. distance.
     // since we need the difference between old and new relative distance (which inversed is the distance we need to adjust the image to),
     // we simply subtract the old relative distance
-    panX -= ((mouseXImage/currentScale) * newScale) - mouseXImage
-    panY -= ((mouseYImage/currentScale) * newScale) - mouseYImage
+    panX -= ((mouseXImage / currentScale) * newScale) - mouseXImage
+    panY -= ((mouseYImage / currentScale) * newScale) - mouseYImage
 
 
 }
@@ -110,12 +109,18 @@ fileInput.onchange = async (e) => {
     image.onload = () => {
         loadImage(image);
     }
-
-    // Exif Orientation fix
-    const dataUrl = await fixOrientation(target.files[0])
-
-    image.src = dataUrl
     //image.src = URL.createObjectURL(target.files[0])
+
+    // Exif Orientation fix (< Chrome 81)
+    await blueimp(target.files[0], {
+        orientation: true,
+        canvas: true,
+    }).then(function (data) {
+        const canvas = data.image as any as HTMLCanvasElement;
+        image.src = canvas.toDataURL("image/jpeg", 1);
+    })
+
+
 }
 
 canvas.addEventListener('wheel', (e: WheelEvent & { wheelDelta: number }) => {
@@ -129,22 +134,22 @@ canvas.addEventListener('wheel', (e: WheelEvent & { wheelDelta: number }) => {
 })
 
 canvas.addEventListener('mousedown', e => {
-  if(e.button === 1) {
-      isPanning = true;
-  }
+    if (e.button === 1) {
+        isPanning = true;
+    }
 })
 
 canvas.addEventListener('mouseup', e => {
-  if(e.button === 1) {
-      isPanning = false;
-  }
+    if (e.button === 1) {
+        isPanning = false;
+    }
 })
 
 canvas.addEventListener('mousemove', e => {
     mouseX = e.pageX
     mouseY = e.pageY
 
-    if(isPanning) {
+    if (isPanning) {
         panX += e.movementX;
         panY += e.movementY;
 

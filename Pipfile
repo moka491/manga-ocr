@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-cefpython3 = "==66.1"
+cefpython3 = {file = "https://github.com/Berserker66/cefpython/releases/download/v74.1.1/cefpython3-74.1-cp39-none-win_amd64.whl"}
 
 [dev-packages]
 

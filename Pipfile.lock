@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "663a808c3d54d5ef61a73e1c28397b3a44c76a1e2d074b3e66d84fe11173a457"
+            "sha256": "652770501190e484f6ae91a2f9e26b35e06ba3f3e350b7f0f5ec659cd07d10d6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -17,12 +17,12 @@
     },
     "default": {
         "cefpython3": {
+            "file": "https://github.com/Berserker66/cefpython/releases/download/v74.1.1/cefpython3-74.1-cp39-none-win_amd64.whl",
             "hashes": [
-                "sha256:3cf0dc13b4e9aa1c7f028e7f1bfe4e7fca6e677f18574f4ef9346f5d48853f51",
-                "sha256:afe1bcde78cbd3790370f4a51cbca37de8bff761de0452f8b8a3b22971bed82a"
+                "sha256:d12a12de18068453bbb0e1b4cfa1ebcb1c3526860d91c0f0975c7e7d4908eb18"
             ],
             "index": "pypi",
-            "version": "==66.1"
+            "version": "==74.1"
         }
     },
     "develop": {}

@@ -5,7 +5,7 @@ function fixOrientation(file): Promise<string> {
         orientation: true,
         canvas: true,
     }).then(function (data) {
-        const canvas = data.image as any as HTMLCanvasElement;
+
 
         return canvas.toDataURL();
     })
