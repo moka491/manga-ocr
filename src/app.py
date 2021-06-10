@@ -17,7 +17,7 @@ def init_cef():
 
     url = "http://localhost:1234" if "--dev" in sys.argv else "file:///web/dist/index.html"
 
-    browser = cef.CreateBrowserSync(url=url, window_title="Manga OCR bruh")
+    browser = cef.CreateBrowserSync(url=url, window_title="Manga OCR")
 
     setup_bindings(browser)
 

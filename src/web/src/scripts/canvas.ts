@@ -1,3 +1,6 @@
+import {getBase64Strings} from "exif-rotate-js";
+import {fixOrientation} from "./fixImageOrientation";
+
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
@@ -96,11 +99,11 @@ function redraw() {
     })
 }
 
-
 recalculateCanvasSize();
-const fileInput = document.getElementById('file-input') as HTMLInputElement;
 
-fileInput.onchange = (e) => {
+
+const fileInput = document.getElementById('file-input') as HTMLInputElement;
+fileInput.onchange = async (e) => {
     const target = e.target as HTMLInputElement;
 
     const image = new Image();
@@ -108,11 +111,15 @@ fileInput.onchange = (e) => {
         loadImage(image);
     }
 
-    image.src = URL.createObjectURL(target.files[0])
+    // Exif Orientation fix
+    const dataUrl = await fixOrientation(target.files[0])
+
+    image.src = dataUrl
+    //image.src = URL.createObjectURL(target.files[0])
 }
 
 canvas.addEventListener('wheel', (e: WheelEvent & { wheelDelta: number }) => {
-    const delta = e.wheelDelta ?? e.deltaY
+    const delta = e.wheelDelta ? e.wheelDelta : e.deltaY
 
     if (delta > 0) {
         zoomIn();
@@ -128,8 +135,6 @@ canvas.addEventListener('mousedown', e => {
 })
 
 canvas.addEventListener('mouseup', e => {
-    console.log(e.button);
-
   if(e.button === 1) {
       isPanning = false;
   }
@@ -146,11 +151,6 @@ canvas.addEventListener('mousemove', e => {
         redraw();
     }
 })
-
-canvas.addEventListener('drag', e => {
-
-})
-
 
 
 

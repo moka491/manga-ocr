@@ -11,8 +11,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.0.0-nightly.713",
-    "parcel": "^2.0.0-beta.3.1",
+    "@types/blueimp-load-image": "^5.14.2",
+    "parcel": "^2.0.0-beta.2",
     "prettier": "^2.3.1"
+  },
+  "dependencies": {
+    "blueimp-load-image": "^5.14.0"
   }
 }
