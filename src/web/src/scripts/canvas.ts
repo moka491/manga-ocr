@@ -119,7 +119,7 @@ fileInput.onchange = async (e) => {
 }
 
 canvas.addEventListener('wheel', (e: WheelEvent & { wheelDelta: number }) => {
-    const delta = e.wheelDelta ? e.wheelDelta : e.deltaY
+    const delta = e.wheelDelta ? e.wheelDelta : -e.deltaY
 
     if (delta > 0) {
         zoomIn();
